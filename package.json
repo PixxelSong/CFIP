@@ -1,0 +1,15 @@
+{
+  "name": "cfst",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "csv": "^6.3.10",
+    "node-fetch": "^3.3.2"
+  }
+}
