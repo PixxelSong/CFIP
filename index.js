@@ -8,7 +8,7 @@ const util = require('util');
 
 
 function git() {
-    child_process.exec('git add.', (error, stdout, stderr) => {
+    child_process.exec('git add .', (error, stdout, stderr) => {
         if (error) {
             console.error(`执行 git add 时出错: ${error}`);
             return;
