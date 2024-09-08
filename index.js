@@ -1,10 +1,39 @@
-const { spawn } = require('child_process');
+const { spawn, child_process } = require('child_process');
 const fs = require("fs");
 const fspromise = require('fs').promises;
 
 const { parse } = require("csv-parse");
 const { stringify } = require("csv-stringify");
 const util = require('util');
+
+
+function git() {
+    child_process.exec('git add.', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`执行 git add 时出错: ${error}`);
+            return;
+        }
+        console.log('git add 执行成功');
+    
+        // 执行 git commit -m "提交信息"
+        child_process.exec('git commit -m "自动提交"', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`执行 git commit 时出错: ${error}`);
+                return;
+            }
+            console.log('git commit 执行成功');
+    
+            // 执行 git push
+            child_process.exec('git push', (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`执行 git push 时出错: ${error}`);
+                    return;
+                }
+                console.log('git push 执行成功');
+            });
+        });
+    });
+}
 
 
 async function resultFile() {
@@ -24,14 +53,20 @@ async function resultFile() {
         .pipe(parse({ delimiter: ",", from_line: 2 }))
         .on("data", function (row) {
             console.log(row);
-            const str = row[0] + ":443" + "#本地测速" + "\n";
+            
+            const ip = row[0];
+            const resultIp = ip.indexOf(':') == -1 ? ip : ('[' + ip + ']');
+
+            const str = resultIp + ":443" + "#本地测速" + "\n";
             fs.appendFile('./iptest.csv', str, (err) => { })
         })
         .on("end", function () {
             console.log("finished");
+            git();
         })
         .on("error", function (error) {
             console.log(error.message);
+            git();
         });
 }
 
