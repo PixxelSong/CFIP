@@ -1,4 +1,4 @@
-const { spawn, child_process } = require('child_process');
+const { spawn, exec } = require('child_process');
 const fs = require("fs");
 const fspromise = require('fs').promises;
 
@@ -8,7 +8,7 @@ const util = require('util');
 
 
 function git() {
-    child_process.exec('git add .', (error, stdout, stderr) => {
+    exec('git add .', (error, stdout, stderr) => {
         if (error) {
             console.error(`执行 git add 时出错: ${error}`);
             return;
@@ -16,7 +16,7 @@ function git() {
         console.log('git add 执行成功');
     
         // 执行 git commit -m "提交信息"
-        child_process.exec('git commit -m "自动提交"', (error, stdout, stderr) => {
+        exec('git commit -m "auto update"', (error, stdout, stderr) => {
             if (error) {
                 console.error(`执行 git commit 时出错: ${error}`);
                 return;
@@ -24,7 +24,7 @@ function git() {
             console.log('git commit 执行成功');
     
             // 执行 git push
-            child_process.exec('git push', (error, stdout, stderr) => {
+            exec('git push', (error, stdout, stderr) => {
                 if (error) {
                     console.error(`执行 git push 时出错: ${error}`);
                     return;
@@ -70,27 +70,28 @@ async function resultFile() {
         });
 }
 
-const cfstCmd = './CloudflareST';
-const cfstCmdParams = '-url https://speed.songxunlei.uk/ -t 8 -dn 10 -sl 8';
-const cfstSpawn = spawn(cfstCmd, cfstCmdParams.split(' '));
+// const cfstCmd = './CloudflareST';
+// const cfstCmdParams = '-url https://speed.songxunlei.uk/ -t 8 -dn 10 -sl 8';
+// const cfstSpawn = spawn(cfstCmd, cfstCmdParams.split(' '));
 
 
-cfstSpawn.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-});
+// cfstSpawn.stdout.on('data', (data) => {
+//     console.log(`stdout: ${data}`);
+// });
 
-cfstSpawn.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-});
+// cfstSpawn.stderr.on('data', (data) => {
+//     console.error(`stderr: ${data}`);
+// });
 
-cfstSpawn.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
+// cfstSpawn.on('close', (code) => {
+//     console.log(`child process exited with code ${code}`);
 
-    fs.readFile('./result.csv', async (err, data) => {
-        if (err) {
-            console.error(err)
-            return
-        }
-        await resultFile()
-    })
-});
+//     fs.readFile('./result.csv', async (err, data) => {
+//         if (err) {
+//             console.error(err)
+//             return
+//         }
+//         await resultFile()
+//     })
+// });
+git();
